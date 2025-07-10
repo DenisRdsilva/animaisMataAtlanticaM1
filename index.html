@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Interativo - Animais da Mata Atlântica</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #2b2b2b;
+      color: white;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #quiz {
+      background-color: #1c1c1c;
+      border: 2px dashed white;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px #555;
+    }
+
+    input, button {
+      padding: 15px;
+      font-size: 18px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    input {
+      width: 60%;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: gray;
+    }
+
+    canvas {
+      background-color: #fff;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    #feedback {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="quiz">
+    <h2>🐾 Questão 1 de 10</h2>
+    <p>Quantos animais foram observados no total na trilha?</p>
+    <canvas id="grafico1" height="150"></canvas>
+
+    <input type="number" id="resposta" placeholder="Digite o total" />
+    <br>
+    <button onclick="verificar()">Verificar</button>
+    <button id="proxima" onclick="proximaQuestao()" disabled>Próxima Questão</button>
+
+    <p id="feedback"></p>
+  </div>
+
+  <script>
+    const dados = {
+      labels: ['🐒 Macacos', '🦜 Araras', '🦫 Capivaras', '🐜 Tamanduás'],
+      valores: [12, 8, 15, 5]
+    };
+
+    const ctx = document.getElementById('grafico1').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: dados.labels,
+        datasets: [{
+          label: 'Animais observados',
+          data: dados.valores,
+          backgroundColor: ['#81c784', '#4db6ac', '#ffd54f', '#ce93d8']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 5
+            }
+          }
+        }
+      }
+    });
+
+    function verificar() {
+      const resposta = parseInt(document.getElementById("resposta").value);
+      const total = dados.valores.reduce((a, b) => a + b, 0);
+      const feedback = document.getElementById("feedback");
+      const botaoProxima = document.getElementById("proxima");
+
+      if (isNaN(resposta)) {
+        feedback.innerText = "⚠️ Digite um número válido.";
+      } else if (resposta === total) {
+        feedback.innerText = "✅ Parabéns! Resposta correta.";
+        botaoProxima.disabled = false;
+      } else {
+        feedback.innerText = "❌ Tente novamente!";
+      }
+    }
+
+    function proximaQuestao() {
+      alert("Avançando para a próxima pergunta...");
+      // Aqui você pode carregar a próxima pergunta ou sequência de perguntas.
+    }
+  </script>
+
+</body>
+</html>
